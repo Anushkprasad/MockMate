@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -36,23 +37,30 @@ export const Card: React.FC<CardProps> = ({
 
   const variantClasses = {
     glass: 'glass-panel',
-    elevated: 'bg-slate-900/50 rounded-2xl border border-white/10 shadow-glass backdrop-blur-md',
-    flat: 'bg-slate-900/30 rounded-2xl border border-transparent',
-    outline: 'bg-transparent rounded-2xl border-2 border-violet-500/30 hover:border-violet-500/60',
+    elevated: 'bg-white/85 rounded-2xl border border-slate-200/60 shadow-md backdrop-blur-md',
+    flat: 'bg-slate-50/50 rounded-2xl border border-transparent',
+    outline: 'bg-transparent rounded-2xl border border-violet-200 hover:border-violet-400/60',
   };
 
   const interactiveClass = interactive 
     ? 'cursor-pointer transition-all duration-300 hover-lift hover-glow' 
     : '';
 
+  const motionProps: any = {};
+  if (interactive || hoverable) {
+    motionProps.whileHover = { y: -6, scale: 1.01 };
+    motionProps.transition = { type: 'spring', stiffness: 350, damping: 18 };
+  }
+
   return (
-    <div
+    <motion.div
       className={`${variantClasses[variant]} ${sizeClasses[size]} rounded-2xl ${hoverable || interactive ? 'transition-all duration-300' : ''} ${
         glowColor !== 'none' ? glowClasses[glowColor] : ''
       } ${interactiveClass} ${className}`}
-      {...props}
+      {...motionProps}
+      {...(props as any)}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };

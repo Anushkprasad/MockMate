@@ -13,7 +13,7 @@ interface AuthContextType {
   socialSignIn: (provider: 'google' | 'github' | 'linkedin') => Promise<boolean>;
   logout: () => void;
   forgotPassword: (email: string) => Promise<boolean>;
-  resetPassword: (password: string) => Promise<boolean>;
+  resetPassword: (token: string, password: string) => Promise<boolean>;
   updateProfile: (updatedUser: Partial<User>) => void;
   loginWithToken: (token: string) => Promise<boolean>;
 }
@@ -146,18 +146,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const forgotPassword = async (email: string): Promise<boolean> => {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    toast.success(`Password reset instructions sent to ${email}`);
-    setIsLoading(false);
-    return true;
+    try {
+      await authService.forgotPassword(email);
+      toast.success(`Password reset instructions sent to ${email}`);
+      return true;
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Failed to send reset email.');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const resetPassword = async (_password: string): Promise<boolean> => {
+  const resetPassword = async (token: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    toast.success('Your password has been reset successfully. Please log in.');
-    setIsLoading(false);
-    return true;
+    try {
+      await authService.resetPassword(token, password);
+      toast.success('Your password has been reset successfully. Please log in.');
+      return true;
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Password reset failed. Token might be invalid or expired.');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const updateProfile = (updatedUser: Partial<User>) => {

@@ -25,7 +25,7 @@ export const TopNavbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-950/50 backdrop-blur-lg border-b border-white/5 px-4 md:px-8 py-3.5 flex items-center justify-between hover-glow transition-all duration-300">
+    <header className="sticky top-0 z-40 bg-white/60 backdrop-blur-lg border-b border-slate-200/50 px-4 md:px-8 py-3.5 flex items-center justify-between hover-glow transition-all duration-300">
       {/* Mobile Menu Trigger & Search */}
       <div className="flex items-center gap-4 flex-1">
         <button
@@ -65,16 +65,16 @@ export const TopNavbar: React.FC = () => {
 
           {/* Notifications Dropdown */}
           {notifOpen && (
-            <div className="absolute right-0 mt-3 w-96 rounded-2xl glass-panel-lg shadow-glass-lg p-5 z-50 border border-white/10 animate-fade-in">
-              <div className="flex justify-between items-center pb-4 border-b border-white/5 mb-4">
-                <span className="font-display font-bold text-sm text-white">
+            <div className="absolute right-0 mt-3 w-96 rounded-2xl glass-panel-lg shadow-glass-lg p-5 z-50 animate-fade-in">
+              <div className="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
+                <span className="font-display font-bold text-sm text-slate-900">
                   Notifications
                   {unreadCount > 0 && <span className="badge-violet ml-2">{unreadCount}</span>}
                 </span>
                 {unreadCount > 0 && (
                   <button 
                     onClick={markAllNotificationsRead}
-                    className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold transition-colors"
+                    className="text-xs text-cyan-600 hover:text-cyan-700 font-semibold transition-colors"
                   >
                     Mark all read
                   </button>
@@ -89,17 +89,17 @@ export const TopNavbar: React.FC = () => {
                       key={n.id}
                       onClick={() => markNotificationRead(n.id)}
                       className={`p-3 rounded-lg transition-all duration-200 cursor-pointer hover-lift ${
-                        n.read ? 'bg-white/2 hover:bg-white/5' : 'bg-violet-500/10 border border-violet-500/20 hover:bg-violet-500/15'
+                        n.read ? 'bg-slate-50 hover:bg-slate-100/70 border border-transparent' : 'bg-violet-500/5 border border-violet-500/10 hover:bg-violet-500/10'
                       }`}
                     >
                       <div className="flex justify-between items-start gap-2">
-                        <span className={`font-semibold text-xs ${n.read ? 'text-slate-300' : 'text-white'}`}>
+                        <span className={`font-semibold text-xs ${n.read ? 'text-slate-600' : 'text-slate-900 font-bold'}`}>
                           {n.title}
                         </span>
-                        {!n.read && <div className="w-2 h-2 mt-1 rounded-full bg-violet-400 flex-shrink-0" />}
+                        {!n.read && <div className="w-2 h-2 mt-1 rounded-full bg-violet-500 flex-shrink-0 shadow-[0_0_8px_rgba(124,58,237,0.4)]" />}
                       </div>
-                      <p className="text-[11px] text-slate-400 mt-1.5">{n.message}</p>
-                      <span className="text-[10px] text-slate-500 mt-2 block">{n.time}</span>
+                      <p className="text-[11px] text-slate-500 mt-1.5">{n.message}</p>
+                      <span className="text-[10px] text-slate-400 mt-2 block">{n.time}</span>
                     </div>
                   ))
                 )}
@@ -123,41 +123,41 @@ export const TopNavbar: React.FC = () => {
               alt={user?.name || 'User'}
               className="w-7 h-7 rounded-lg object-cover bg-gradient-to-br from-violet-500 to-cyan-400"
             />
-            <span className="text-xs font-semibold text-slate-300 hidden md:block max-w-[100px] truncate">
+            <span className="text-xs font-semibold text-slate-700 hidden md:block max-w-[100px] truncate">
               {user?.name?.split(' ')[0] || 'User'}
             </span>
           </button>
 
           {/* Profile Dropdown Options */}
           {profileOpen && (
-            <div className="absolute right-0 mt-3 w-56 rounded-2xl glass-panel-lg shadow-glass-lg p-2 z-50 border border-white/10 animate-fade-in">
-              <div className="px-4 py-3 border-b border-white/5 mb-2">
-                <span className="font-bold text-xs text-white block truncate">{user?.name}</span>
-                <span className="text-[11px] text-slate-400 block truncate mt-0.5">{user?.email}</span>
+            <div className="absolute right-0 mt-3 w-56 rounded-2xl glass-panel-lg shadow-glass-lg p-2 z-50 animate-fade-in">
+              <div className="px-4 py-3 border-b border-slate-100 mb-2">
+                <span className="font-bold text-xs text-slate-900 block truncate">{user?.name}</span>
+                <span className="text-[11px] text-slate-500 block truncate mt-0.5">{user?.email}</span>
               </div>
 
               <Link
                 to="/profile"
                 onClick={() => setProfileOpen(false)}
-                className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs text-slate-300 hover:text-white hover:bg-white/5 transition-all duration-200"
+                className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-200"
               >
-                <User className="w-4 h-4" />
+                <User className="w-4 h-4 text-slate-500" />
                 View Profile
               </Link>
               <Link
                 to="/settings"
                 onClick={() => setProfileOpen(false)}
-                className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs text-slate-300 hover:text-white hover:bg-white/5 transition-all duration-200"
+                className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-200"
               >
-                <Settings className="w-4 h-4" />
+                <Settings className="w-4 h-4 text-slate-500" />
                 Settings
               </Link>
               
-              <div className="border-t border-white/5 my-2" />
+              <div className="border-t border-slate-100 my-2" />
 
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-3 w-full text-left px-4 py-2.5 rounded-lg text-xs text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-all duration-200 font-semibold"
+                className="flex items-center gap-3 w-full text-left px-4 py-2.5 rounded-lg text-xs text-rose-600 hover:bg-rose-50 hover:text-rose-700 transition-all duration-200 font-semibold"
               >
                 <LogOut className="w-4 h-4" />
                 Logout

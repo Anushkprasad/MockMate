@@ -87,10 +87,10 @@ const Login: React.FC = () => {
           <input
             id="rememberMe"
             type="checkbox"
-            className="w-4 h-4 rounded bg-slate-900 border-white/10 text-violet-600 focus:ring-violet-500/50"
+            className="w-4 h-4 rounded border-slate-350 text-violet-600 focus:ring-violet-500/20 bg-white"
             {...register('rememberMe')}
           />
-          <label htmlFor="rememberMe" className="ml-2 text-xs text-slate-400 select-none cursor-pointer">
+          <label htmlFor="rememberMe" className="ml-2 text-xs text-slate-600 font-medium select-none cursor-pointer">
             Remember me on this browser
           </label>
         </div>
@@ -101,9 +101,11 @@ const Login: React.FC = () => {
       </form>
 
       <div className="relative my-6">
-        <div className="absolute inset-0 flex items-center"><div className="w-12 h-12 rounded-xl bg-violet-500/10 items-center justify-center"></div></div>
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-slate-200" />
+        </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-slate-950 px-3 text-slate-500 font-bold text-[10px] tracking-wider">Or continue with</span>
+          <span className="bg-white px-3 text-slate-500 font-bold text-[10px] tracking-wider">OR CONTINUE WITH</span>
         </div>
       </div>
 

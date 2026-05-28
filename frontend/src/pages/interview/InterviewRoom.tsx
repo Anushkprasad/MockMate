@@ -66,14 +66,7 @@ interface SpeechRecognition extends EventTarget {
   abort(): void;
 }
 
-interface Window {
-  SpeechRecognition?: {
-    new (): SpeechRecognition;
-  };
-  webkitSpeechRecognition?: {
-    new (): SpeechRecognition;
-  };
-}
+
 
 const InterviewRoom: React.FC = () => {
   const { 
@@ -171,7 +164,7 @@ const InterviewRoom: React.FC = () => {
 
   // Initialize Speech Recognition
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
       setIsSpeechSupported(false);
       return;

@@ -1,7 +1,8 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'success' | 'outline';
+  variant?: 'primary' | 'purple' | 'secondary' | 'ghost' | 'danger' | 'success' | 'outline';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   loading?: boolean;
   icon?: React.ReactNode;
@@ -19,15 +20,16 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus-ring';
+  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus-ring';
   
   const variants = {
-    primary: 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-glow-md hover:shadow-glow-lg border border-violet-500/30 hover-glow',
+    primary: 'bg-gradient-to-r from-sky-500 to-sky-600 text-white hover:from-sky-400 hover:to-sky-500 shadow-[0_4px_14px_rgba(2,132,199,0.2)] hover:shadow-[0_6px_20px_rgba(2,132,199,0.3)] border border-sky-500/20',
+    purple: 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:from-violet-500 hover:to-fuchsia-500 shadow-[0_4px_14px_rgba(124,58,237,0.2)] hover:shadow-[0_6px_20px_rgba(124,58,237,0.3)] border border-violet-500/20',
     secondary: 'glass-btn',
-    ghost: 'glass-btn-secondary hover:shadow-glow-sm',
-    danger: 'bg-gradient-to-r from-red-600 to-pink-600 text-white hover:from-red-500 hover:to-pink-500 shadow-[0_0_15px_rgba(220,38,38,0.3)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)] border border-red-500/30',
-    success: 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-500 hover:to-teal-500 shadow-[0_0_15px_rgba(16,185,129,0.3)] border border-emerald-500/30',
-    outline: 'border-2 border-violet-500/50 text-violet-300 hover:border-violet-500 hover:bg-violet-500/5 transition-all duration-300',
+    ghost: 'glass-btn-secondary hover:shadow-sm',
+    danger: 'bg-gradient-to-r from-red-500 to-pink-500 text-white hover:from-red-400 hover:to-pink-400 shadow-[0_4px_12px_rgba(239,68,68,0.15)] border border-red-500/20',
+    success: 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-400 hover:to-teal-400 shadow-[0_4px_12px_rgba(16,185,129,0.15)] border border-emerald-500/20',
+    outline: 'border border-sky-500/40 text-sky-600 hover:border-sky-600 hover:bg-sky-500/5 transition-all duration-300',
   };
 
   const sizes = {
@@ -40,10 +42,13 @@ export const Button: React.FC<ButtonProps> = ({
   const widthClass = fullWidth ? 'w-full' : '';
 
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.05, y: -1 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${widthClass} ${className}`}
       disabled={disabled || loading}
-      {...props}
+      {...(props as any)}
     >
       {loading && (
         <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-current flex-shrink-0" fill="none" viewBox="0 0 24 24">
@@ -53,6 +58,6 @@ export const Button: React.FC<ButtonProps> = ({
       )}
       {!loading && icon && <span className="flex-shrink-0">{icon}</span>}
       {children}
-    </button>
+    </motion.button>
   );
 };

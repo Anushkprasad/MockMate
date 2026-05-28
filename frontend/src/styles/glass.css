@@ -3,76 +3,76 @@
      GLASSMORPHISM BASE STYLES
      ========================================== */
   .glass-panel {
-    @apply bg-white/5 backdrop-blur-md rounded-2xl shadow-glass border border-white/10 transition-all duration-300;
+    @apply bg-white/75 backdrop-blur-md rounded-2xl shadow-sm border border-slate-200/50 transition-all duration-300;
   }
 
   .glass-panel-lg {
-    @apply bg-white/5 backdrop-blur-lg rounded-2xl shadow-glass-lg border border-white/15 transition-all duration-300;
+    @apply bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-slate-200/60 transition-all duration-300;
   }
 
   .glass-card {
-    @apply bg-white/3 backdrop-blur-sm rounded-xl shadow-md border border-white/5 transition-all duration-300 hover:border-white/10 hover:bg-white/5;
+    @apply bg-white/70 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/45 transition-all duration-300 hover:border-violet-500/25 hover:bg-white/80;
   }
 
   .glass-input {
-    @apply bg-white/5 backdrop-blur-md border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-violet-500/50 focus:bg-white/10 focus:ring-2 focus:ring-violet-500/20 transition-all duration-300;
+    @apply bg-white/60 backdrop-blur-md border border-slate-200 rounded-lg px-4 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-500 focus:bg-white/85 focus:ring-2 focus:ring-violet-500/15 transition-all duration-300;
   }
 
   /* ==========================================
      BUTTON STYLES
      ========================================== */
   .glass-btn {
-    @apply bg-white/5 backdrop-blur-md text-white hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-white/20;
+    @apply bg-white/80 backdrop-blur-md text-slate-800 hover:bg-white transition-all duration-300 border border-slate-200 hover:border-slate-300;
   }
 
   .glass-btn-secondary {
-    @apply bg-white/3 backdrop-blur-sm text-white hover:bg-white/8 transition-all duration-300 border border-white/5 hover:border-white/10;
+    @apply bg-white/50 backdrop-blur-sm text-slate-600 hover:bg-white/80 transition-all duration-300 border border-slate-200/50 hover:border-slate-250;
   }
 
   /* ==========================================
      BADGE & TAG STYLES
      ========================================== */
   .badge-violet {
-    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-300 text-xs font-semibold;
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-50 border border-violet-200 text-violet-700 text-xs font-semibold;
   }
 
   .badge-cyan {
-    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs font-semibold;
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-sky-700 text-xs font-semibold;
   }
 
   .badge-success {
-    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-semibold;
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold;
   }
 
   .badge-danger {
-    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/20 border border-red-500/30 text-red-300 text-xs font-semibold;
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold;
   }
 
   .badge-warning {
-    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-semibold;
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold;
   }
 
   .tag-neon-pink {
-    @apply px-3 py-1 rounded-full bg-fuchsia-500/15 border border-fuchsia-500/40 text-fuchsia-300 text-xs font-bold;
+    @apply px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-pink-700 text-xs font-bold;
   }
 
   .tag-neon-cyan {
-    @apply px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 text-xs font-bold;
+    @apply px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-sky-700 text-xs font-bold;
   }
 
   .tag-neon-amber {
-    @apply px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs font-bold;
+    @apply px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold;
   }
 
   .tag-neon-violet {
-    @apply px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/40 text-violet-300 text-xs font-bold;
+    @apply px-3 py-1 rounded-full bg-violet-50 border border-violet-200 text-violet-700 text-xs font-bold;
   }
 
   /* ==========================================
      GRADIENT OVERLAYS
      ========================================== */
   .gradient-radial-purple {
-    @apply bg-gradient-radial from-violet-600/20 to-transparent;
+    @apply bg-gradient-radial from-violet-200/40 to-transparent;
   }
 
   .gradient-mesh-violet {
@@ -87,33 +87,33 @@
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-violet-400 via-fuchsia-500 to-cyan-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-violet-600 via-fuchsia-600 to-sky-600 bg-clip-text text-transparent;
   }
 
   .text-gradient-pink {
-    @apply bg-gradient-to-r from-pink-400 to-rose-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-pink-500 to-rose-600 bg-clip-text text-transparent;
   }
 
   /* ==========================================
      BORDER & DIVIDER STYLES
      ========================================== */
   .border-glass {
-    @apply border border-white/10;
+    @apply border border-slate-200/40;
   }
 
   .divider-glass {
-    @apply h-px bg-gradient-to-r from-transparent via-white/20 to-transparent;
+    @apply h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent;
   }
 
   /* ==========================================
      HOVER EFFECTS
      ========================================== */
   .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-glass;
+    @apply transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md;
   }
 
   .hover-glow {
-    @apply transition-all duration-300 hover:shadow-glow-md hover:border-violet-500/30;
+    @apply transition-all duration-300 hover:shadow-md hover:border-violet-500/20;
   }
 
   /* ==========================================
@@ -132,7 +132,7 @@
      FOCUS RING
      ========================================== */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:ring-offset-2 focus:ring-offset-slate-950;
+    @apply focus:outline-none focus:ring-2 focus:ring-violet-500/25 focus:ring-offset-2 focus:ring-offset-white;
   }
 
   /* ==========================================

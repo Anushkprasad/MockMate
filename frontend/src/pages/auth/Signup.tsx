@@ -104,16 +104,16 @@ const Signup: React.FC = () => {
             <input
               id="agreeTerms"
               type="checkbox"
-              className="mt-0.5 w-4 h-4 rounded bg-slate-900 border-white/10 text-violet-600 focus:ring-violet-500/50"
+              className="mt-0.5 w-4 h-4 rounded border-slate-350 text-violet-600 focus:ring-violet-500/20 bg-white"
               {...register('agreeTerms')}
             />
-            <label htmlFor="agreeTerms" className="ml-2 text-xs text-slate-400 select-none cursor-pointer">
+            <label htmlFor="agreeTerms" className="ml-2 text-xs text-slate-600 font-medium select-none cursor-pointer">
               I agree to the MockMate{' '}
-              <a href="#" className="text-cyan-400 hover:underline">
+              <a href="#" className="text-sky-600 hover:underline font-semibold">
                 Terms of Use
               </a>{' '}
               and{' '}
-              <a href="#" className="text-cyan-400 hover:underline">
+              <a href="#" className="text-sky-600 hover:underline font-semibold">
                 Privacy Policy
               </a>
             </label>
@@ -131,17 +131,17 @@ const Signup: React.FC = () => {
       </form>
 
       <div className="relative my-6">
-        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5" /></div>
+        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200" /></div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-slate-950 px-3 text-slate-500 font-bold text-[10px] tracking-wider">Or sign up with</span>
+          <span className="bg-white px-3 text-slate-500 font-bold text-[10px] tracking-wider">OR SIGN UP WITH</span>
         </div>
       </div>
 
       <SocialLoginButtons />
 
-      <div className="mt-6 text-center text-xs text-slate-400">
+      <div className="mt-6 text-center text-xs text-slate-500 font-medium">
         Already have an account?{' '}
-        <Link to="/login" className="text-cyan-400 hover:underline font-semibold">
+        <Link to="/login" className="text-sky-600 hover:underline font-semibold">
           Sign In
         </Link>
       </div>

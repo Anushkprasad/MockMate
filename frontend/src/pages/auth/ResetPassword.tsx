@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -23,6 +23,7 @@ type ResetFormValues = z.infer<typeof resetPasswordSchema>;
 
 const ResetPassword: React.FC = () => {
   const { resetPassword } = useAuth();
+  const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -38,7 +39,7 @@ const ResetPassword: React.FC = () => {
   const onSubmit = async (data: ResetFormValues) => {
     setIsSubmitting(true);
     try {
-      const success = await resetPassword(data.password);
+      const success = await resetPassword(token || '', data.password);
       if (success) {
         navigate('/login');
       }

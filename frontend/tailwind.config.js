@@ -57,18 +57,18 @@ module.exports = {
         xl: '40px',
       },
       boxShadow: {
-        glass: '0 8px 32px rgba(0, 0, 0, 0.4)',
-        'glass-lg': '0 20px 60px rgba(0, 0, 0, 0.5)',
-        'glow-sm': '0 0 10px rgba(139, 92, 246, 0.3)',
-        'glow-md': '0 0 20px rgba(139, 92, 246, 0.4)',
-        'glow-lg': '0 0 30px rgba(139, 92, 246, 0.5)',
-        'glow-purple': '0 0 20px rgba(139, 92, 246, 0.5), 0 0 40px rgba(168, 85, 247, 0.3)',
-        'glow-cyan': '0 0 20px rgba(34, 211, 238, 0.4)',
-        'glow-pink': '0 0 20px rgba(217, 70, 239, 0.4)',
+        glass: '0 8px 32px rgba(124, 58, 237, 0.06)',
+        'glass-lg': '0 20px 50px rgba(124, 58, 237, 0.12)',
+        'glow-sm': '0 2px 8px rgba(124, 58, 237, 0.12)',
+        'glow-md': '0 4px 15px rgba(124, 58, 237, 0.15)',
+        'glow-lg': '0 10px 25px rgba(124, 58, 237, 0.2)',
+        'glow-purple': '0 4px 15px rgba(124, 58, 237, 0.2), 0 0 25px rgba(168, 85, 247, 0.15)',
+        'glow-cyan': '0 4px 15px rgba(2, 132, 199, 0.15)',
+        'glow-pink': '0 4px 15px rgba(236, 72, 153, 0.15)',
       },
       textShadow: {
-        glow: '0 0 10px rgba(139, 92, 246, 0.5)',
-        'glow-lg': '0 0 20px rgba(139, 92, 246, 0.6)',
+        glow: '0 0 10px rgba(124, 58, 237, 0.2)',
+        'glow-lg': '0 0 20px rgba(124, 58, 237, 0.3)',
       },
       borderRadius: {
         xl: '1rem',
@@ -111,8 +111,8 @@ module.exports = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'gradient-mesh': `
-          linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-          linear-gradient(45deg, rgba(34, 211, 238, 0.05) 0%, transparent 50%)
+          linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, transparent 50%),
+          linear-gradient(45deg, rgba(2, 132, 199, 0.04) 0%, transparent 50%)
         `,
       },
     },

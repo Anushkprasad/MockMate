@@ -59,15 +59,15 @@ const Dashboard: React.FC = () => {
     <div className="space-y-6">
       {/* 1. WELCOME HERO & QUICK ACTIONS */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-violet-600/10 to-cyan-400/5 blur-2xl -z-10 rounded-3xl" />
-        <Card variant="elevated" size="lg" className="rounded-3xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-violet-600/5 to-sky-400/5 blur-2xl -z-10 rounded-3xl" />
+        <Card variant="elevated" size="lg" className="rounded-3xl border-slate-200/60 shadow-lg">
           <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
             <div className="space-y-3 flex-1">
-              <h1 className="text-2xl md:text-3xl font-display font-extrabold text-white flex items-center gap-3">
+              <h1 className="text-2xl md:text-3xl font-display font-extrabold text-slate-900 flex items-center gap-3">
                 Welcome back, {user?.name || 'Prep Cadet'} 
-                <Sparkles className="w-6 h-6 text-violet-400 animate-pulse-glow" />
+                <Sparkles className="w-6 h-6 text-violet-500 animate-pulse-glow" />
               </h1>
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed font-semibold">
                 Your placement readiness index stands at <span className="badge-cyan px-2 py-1 inline-block">{averageScore}%</span>. Keep practicing to secure top offers!
               </p>
             </div>
@@ -76,8 +76,8 @@ const Dashboard: React.FC = () => {
                 variant="primary"
                 size="lg"
                 onClick={() => navigate('/interview')}
-                icon={<Play className="w-5 h-5" />}
-                className="flex-1 md:flex-none shadow-glow-lg"
+                icon={<Play className="w-5 h-5 animate-pulse" />}
+                className="flex-1 md:flex-none"
               >
                 Start Mock Interview
               </Button>
@@ -96,58 +96,58 @@ const Dashboard: React.FC = () => {
       {/* 2. ANALYTICS SUMMARY CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Completed interviews */}
-        <Card variant="elevated" size="md" interactive glowColor="purple">
+        <Card variant="elevated" size="md" interactive glowColor="purple" className="shadow-md">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] uppercase font-bold text-slate-400 tracking-wider">Interviews Completed</span>
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500/20 to-violet-500/5 border border-violet-500/30 flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-violet-400" />
+              <span className="text-[11px] uppercase font-bold text-slate-500 tracking-wider">Interviews Completed</span>
+              <div className="w-10 h-10 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center">
+                <Calendar className="w-5 h-5 text-violet-600" />
               </div>
             </div>
-            <div className="text-3xl font-display font-extrabold text-white">{totalInterviews}</div>
-            <p className="text-[10px] text-emerald-400 font-semibold">Active practice tier</p>
+            <div className="text-3xl font-display font-extrabold text-slate-900">{totalInterviews}</div>
+            <p className="text-[10px] text-violet-600 font-bold">Active practice tier</p>
           </div>
         </Card>
 
         {/* Card 2: Average Score */}
-        <Card variant="elevated" size="md" interactive glowColor="cyan">
+        <Card variant="elevated" size="md" interactive glowColor="cyan" className="shadow-md">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] uppercase font-bold text-slate-400 tracking-wider">Average Score</span>
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/30 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-cyan-400" />
+              <span className="text-[11px] uppercase font-bold text-slate-500 tracking-wider">Average Score</span>
+              <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-sky-600" />
               </div>
             </div>
-            <div className="text-3xl font-display font-extrabold text-white">{averageScore}%</div>
-            <p className="text-[10px] text-cyan-400 font-semibold">Proficient standing</p>
+            <div className="text-3xl font-display font-extrabold text-slate-900">{averageScore}%</div>
+            <p className="text-[10px] text-sky-600 font-bold">Proficient standing</p>
           </div>
         </Card>
 
         {/* Card 3: Confidence Score */}
-        <Card variant="elevated" size="md" interactive glowColor="emerald">
+        <Card variant="elevated" size="md" interactive glowColor="emerald" className="shadow-md">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] uppercase font-bold text-slate-400 tracking-wider">Avg. Confidence</span>
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 border border-emerald-500/30 flex items-center justify-center">
-                <ShieldCheck className="w-5 h-5 text-emerald-400" />
+              <span className="text-[11px] uppercase font-bold text-slate-500 tracking-wider">Avg. Confidence</span>
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5 text-emerald-600" />
               </div>
             </div>
-            <div className="text-3xl font-display font-extrabold text-white">{averageConfidence}%</div>
-            <p className="text-[10px] text-emerald-400 font-semibold">+2.5% improvement</p>
+            <div className="text-3xl font-display font-extrabold text-slate-900">{averageConfidence}%</div>
+            <p className="text-[10px] text-emerald-650 font-bold">+2.5% improvement</p>
           </div>
         </Card>
 
         {/* Card 4: Eye Contact */}
-        <Card variant="elevated" size="md" interactive glowColor="pink">
+        <Card variant="elevated" size="md" interactive glowColor="pink" className="shadow-md">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] uppercase font-bold text-slate-400 tracking-wider">Eye Contact Gaze</span>
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-fuchsia-500/20 to-fuchsia-500/5 border border-fuchsia-500/30 flex items-center justify-center">
-                <Eye className="w-5 h-5 text-fuchsia-400" />
+              <span className="text-[11px] uppercase font-bold text-slate-500 tracking-wider">Eye Contact Gaze</span>
+              <div className="w-10 h-10 rounded-xl bg-pink-50 border border-pink-100 flex items-center justify-center">
+                <Eye className="w-5 h-5 text-pink-600" />
               </div>
             </div>
-            <div className="text-3xl font-display font-extrabold text-white">{averageEyeContact}%</div>
-            <p className="text-[10px] text-fuchsia-400 font-semibold">Focus camera lens</p>
+            <div className="text-3xl font-display font-extrabold text-slate-900">{averageEyeContact}%</div>
+            <p className="text-[10px] text-pink-600 font-bold">Focus camera lens</p>
           </div>
         </Card>
       </div>
@@ -155,10 +155,10 @@ const Dashboard: React.FC = () => {
       {/* 3. CHARTS GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Performance Trend chart (2 columns on lg) */}
-        <Card variant="elevated" size="lg" className="lg:col-span-2 space-y-5">
+        <Card variant="elevated" size="lg" className="lg:col-span-2 space-y-5 shadow-lg">
           <div className="space-y-1.5">
-            <h3 className="text-sm uppercase font-bold text-white tracking-wider">Performance Trends</h3>
-            <p className="text-xs text-slate-400">Overview of recent score metric improvements</p>
+            <h3 className="text-sm uppercase font-bold text-slate-800 tracking-wider">Performance Trends</h3>
+            <p className="text-xs text-slate-500 font-semibold">Overview of recent score metric improvements</p>
           </div>
           <div className="h-72 w-full -mx-6 px-6">
             <ResponsiveContainer width="100%" height="100%">
@@ -168,51 +168,52 @@ const Dashboard: React.FC = () => {
               >
                 <defs>
                   <linearGradient id="colorOverall" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.15}/>
+                    <stop offset="95%" stopColor="#7c3aed" stopOpacity={0}/>
                   </linearGradient>
                   <linearGradient id="colorTech" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#0284c7" stopOpacity={0.12}/>
+                    <stop offset="95%" stopColor="#0284c7" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(226,232,240,0.6)" />
                 <XAxis dataKey="name" stroke="#64748b" fontSize={10} tickLine={false} />
                 <YAxis stroke="#64748b" fontSize={10} domain={[40, 100]} tickLine={false} />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'rgba(10, 15, 30, 0.95)', 
-                    borderColor: 'rgba(255,255,255,0.1)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                    borderColor: 'rgba(226, 232, 240, 0.8)',
                     borderRadius: '12px',
                     fontSize: '11px',
-                    color: '#fff'
+                    color: '#0f172a',
+                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)'
                   }} 
                 />
-                <Area type="monotone" dataKey="Overall" stroke="#8b5cf6" strokeWidth={2.5} fillOpacity={1} fill="url(#colorOverall)" />
-                <Area type="monotone" dataKey="Technical" stroke="#06b6d4" strokeWidth={2.0} fillOpacity={1} fill="url(#colorTech)" />
+                <Area type="monotone" dataKey="Overall" stroke="#7c3aed" strokeWidth={2.5} fillOpacity={1} fill="url(#colorOverall)" />
+                <Area type="monotone" dataKey="Technical" stroke="#0284c7" strokeWidth={2.0} fillOpacity={1} fill="url(#colorTech)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </Card>
 
         {/* Score Vectors Distribution Radar (1 column on lg) */}
-        <Card variant="elevated" size="lg" className="space-y-5">
+        <Card variant="elevated" size="lg" className="space-y-5 shadow-lg">
           <div className="space-y-1.5">
-            <h3 className="text-sm uppercase font-bold text-white tracking-wider">Score Vectors</h3>
-            <p className="text-xs text-slate-400">Distribution across modules</p>
+            <h3 className="text-sm uppercase font-bold text-slate-800 tracking-wider">Score Vectors</h3>
+            <p className="text-xs text-slate-500 font-semibold">Distribution across modules</p>
           </div>
           <div className="h-72 w-full flex items-center justify-center -mx-6 px-6">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="70%" data={SCORE_DISTRIBUTION}>
-                <PolarGrid stroke="rgba(255,255,255,0.05)" />
-                <PolarAngleAxis dataKey="subject" stroke="#94a3b8" fontSize={9} />
-                <PolarRadiusAxis stroke="#475569" angle={30} domain={[0, 100]} fontSize={8} />
+                <PolarGrid stroke="rgba(226, 232, 240, 0.8)" />
+                <PolarAngleAxis dataKey="subject" stroke="#475569" fontSize={9} />
+                <PolarRadiusAxis stroke="#94a3b8" angle={30} domain={[0, 100]} fontSize={8} />
                 <Radar 
                   name="Alex Mercer" 
                   dataKey="A" 
-                  stroke="#8b5cf6" 
-                  fill="#8b5cf6"
-                  fillOpacity={0.25} 
+                  stroke="#7c3aed" 
+                  fill="#7c3aed"
+                  fillOpacity={0.15} 
                 />
               </RadarChart>
             </ResponsiveContainer>
@@ -223,16 +224,16 @@ const Dashboard: React.FC = () => {
       {/* 4. RECENT INTERVIEWS & AI ROADMAP */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Interviews list */}
-        <Card className="space-y-4 border-white/5 flex flex-col justify-between">
+        <Card className="space-y-4 border-slate-200/60 shadow-lg flex flex-col justify-between">
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-xs uppercase font-black text-slate-400 tracking-wider">Recent Activity</h3>
-                <p className="text-[10px] text-slate-500">Your most recent completed mock trials</p>
+                <h3 className="text-xs uppercase font-black text-slate-500 tracking-wider">Recent Activity</h3>
+                <p className="text-[10px] text-slate-500 font-semibold">Your most recent completed mock trials</p>
               </div>
               <button 
                 onClick={() => navigate('/history')}
-                className="text-[10px] font-bold text-cyan-400 hover:underline flex items-center gap-1"
+                className="text-[10px] font-bold text-sky-600 hover:underline flex items-center gap-1"
               >
                 View all <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -242,20 +243,20 @@ const Dashboard: React.FC = () => {
               {reports.slice(0, 3).map((r) => (
                 <div 
                   key={r.id}
-                  className="p-3.5 rounded-xl border border-white/5 bg-slate-900/40 flex items-center justify-between hover:border-white/10 transition-colors"
+                  className="p-3.5 rounded-xl border border-slate-100 bg-white/70 flex items-center justify-between hover:border-violet-500/20 hover:bg-white transition-all duration-300 shadow-sm"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-white">{r.companyName}</span>
-                      <span className="text-[9px] text-slate-400 font-mono">({r.role})</span>
+                      <span className="text-xs font-bold text-slate-900">{r.companyName}</span>
+                      <span className="text-[9px] text-slate-500 font-mono">({r.role})</span>
                     </div>
-                    <span className="text-[10px] text-slate-500 block">{r.date}</span>
+                    <span className="text-[10px] text-slate-500 font-medium block">{r.date}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <ScoreBadge score={r.overallScore} size="sm" />
                     <button 
                       onClick={() => navigate(`/reports`, { state: { reportId: r.id } })}
-                      className="p-2 rounded-lg bg-white/5 border border-white/5 text-slate-400 hover:text-white"
+                      className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors cursor-pointer"
                     >
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
@@ -264,42 +265,42 @@ const Dashboard: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="pt-4 border-t border-white/5">
+          <div className="pt-4 border-t border-slate-200/50">
             <ProgressBar value={88} showLabel />
           </div>
         </Card>
 
         {/* AI Recommendations panel */}
-        <Card className="space-y-4 border-white/5">
+        <Card className="space-y-4 border-slate-200/60 shadow-lg">
           <div>
-            <h3 className="text-xs uppercase font-black text-slate-400 tracking-wider">AI Coach Roadmap</h3>
-            <p className="text-[10px] text-slate-500">Personalized pointers generated from biometrics history</p>
+            <h3 className="text-xs uppercase font-black text-slate-500 tracking-wider">AI Coach Roadmap</h3>
+            <p className="text-[10px] text-slate-500 font-semibold">Personalized pointers generated from biometrics history</p>
           </div>
           <div className="space-y-3.5">
             {MOCK_RECOMMENDATIONS.map((rec) => (
               <div 
                 key={rec.id}
-                className={`p-3.5 rounded-xl border flex gap-3.5 relative overflow-hidden ${
+                className={`p-3.5 rounded-xl border flex gap-3.5 relative overflow-hidden transition-all duration-300 ${
                   rec.priority === 'high' 
-                    ? 'border-violet-500/20 bg-violet-600/5' 
-                    : 'border-white/5 bg-slate-900/40'
+                    ? 'border-violet-200 bg-violet-50/50 shadow-sm shadow-violet-500/5 hover:border-violet-300' 
+                    : 'border-slate-100 bg-white/70 shadow-sm hover:border-violet-500/20 hover:bg-white'
                 }`}
               >
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
                   rec.priority === 'high' 
-                    ? 'bg-violet-500/25 border border-violet-500/30 text-violet-400' 
-                    : 'bg-white/5 border border-white/10 text-slate-400'
+                    ? 'bg-violet-100 border border-violet-200 text-violet-600 shadow-sm' 
+                    : 'bg-slate-50 border border-slate-200 text-slate-500 shadow-sm'
                 }`}>
-                  <Award className="w-4 h-4" />
+                  <Award className="w-4 h-4 animate-pulse" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="text-xs font-bold text-white flex items-center gap-2">
+                  <h4 className="text-xs font-bold text-slate-900 flex items-center gap-2">
                     {rec.title}
                     {rec.priority === 'high' && (
-                      <span className="text-[9px] font-black text-violet-400 px-1 py-0.5 rounded border border-violet-400/25 bg-violet-400/10">HIGH PRIORITY</span>
+                      <span className="text-[9px] font-black text-violet-700 px-1.5 py-0.5 rounded border border-violet-200 bg-violet-100">HIGH PRIORITY</span>
                     )}
                   </h4>
-                  <p className="text-[10px] text-slate-400 leading-relaxed">
+                  <p className="text-[10px] text-slate-600 leading-relaxed font-semibold">
                     {rec.description}
                   </p>
                 </div>

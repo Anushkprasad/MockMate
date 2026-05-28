@@ -1,5 +1,5 @@
 const express = require("express");
-const { registerUser,loginUser,getMe } = require("../controllers/authController");
+const { registerUser,loginUser,getMe,forgotPassword,resetPassword } = require("../controllers/authController");
 const protect = require("../middlewares/authMiddleware");
 const passport = require("passport");
 
@@ -27,6 +27,28 @@ router.post(
 );
 router.post("/login", loginUser);
 router.get("/me", protect, getMe);
+
+router.post(
+  "/forgot-password",
+  [
+    body("email")
+      .isEmail()
+      .withMessage("Valid email required"),
+  ],
+  validate,
+  forgotPassword
+);
+
+router.post(
+  "/reset-password/:token",
+  [
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be 6 characters"),
+  ],
+  validate,
+  resetPassword
+);
 
 router.get(
   "/google",

@@ -41,13 +41,13 @@ const InterviewHistory: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-xl md:text-2xl font-display font-extrabold text-white">Interview Practice Logs</h1>
-          <p className="text-slate-400 text-xs font-medium">History of all simulated mock interviews and biometrics logs</p>
+          <h1 className="text-xl md:text-2xl font-display font-extrabold text-slate-900">Interview Practice Logs</h1>
+          <p className="text-slate-500 text-xs font-semibold">History of all simulated mock interviews and biometrics logs</p>
         </div>
 
         {/* Filter input */}
         <div className="relative w-full sm:max-w-xs">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchTerm}
@@ -56,17 +56,17 @@ const InterviewHistory: React.FC = () => {
               setCurrentPage(1); // reset pagination
             }}
             placeholder="Search by company or role..."
-            className="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-slate-900/60 border border-white/5 text-white placeholder-slate-500 focus:outline-none focus:border-violet-500/50 transition-all duration-300"
+            className="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-white/70 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500/20 transition-all duration-300"
           />
         </div>
       </div>
 
-      <Card className="border-white/5 p-0 overflow-hidden">
+      <Card className="border-slate-200/60 shadow-lg p-0 overflow-hidden bg-white/80 backdrop-blur-md">
         {/* Responsive Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/5 bg-slate-950/40 text-slate-400 font-mono text-[10px] tracking-wider uppercase">
+              <tr className="border-b border-slate-200/60 bg-slate-50/50 text-slate-500 font-mono text-[10px] tracking-wider uppercase">
                 <th className="py-4 px-6 font-bold">Interview Profile</th>
                 <th className="py-4 px-6 font-bold">Simulated Company</th>
                 <th className="py-4 px-6 font-bold text-center">Session Rating</th>
@@ -74,25 +74,25 @@ const InterviewHistory: React.FC = () => {
                 <th className="py-4 px-6 font-bold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 text-slate-300 text-xs">
+            <tbody className="divide-y divide-slate-100 text-slate-700 text-xs font-semibold">
               {currentItems.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-12 text-center text-slate-500">
+                  <td colSpan={5} className="py-12 text-center text-slate-500 font-bold">
                     No matching interview records found. Take a mock test!
                   </td>
                 </tr>
               ) : (
                 currentItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-white/2 transition-colors">
+                  <tr key={item.id} className="hover:bg-violet-50/20 transition-all duration-200">
                     {/* Role info */}
-                    <td className="py-4.5 px-6 font-semibold text-white">
+                    <td className="py-4.5 px-6 font-semibold text-slate-900">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-violet-600/10 border border-violet-500/20 flex items-center justify-center">
-                          <Compass className="w-4 h-4 text-violet-400" />
+                        <div className="w-8 h-8 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center">
+                          <Compass className="w-4 h-4 text-violet-600" />
                         </div>
                         <div>
-                          <span className="block font-bold">{item.role}</span>
-                          <span className="text-[10px] text-slate-400 font-medium font-mono">ID: {item.id}</span>
+                          <span className="block font-bold text-slate-900">{item.role}</span>
+                          <span className="text-[10px] text-slate-500 font-semibold font-mono">ID: {item.id}</span>
                         </div>
                       </div>
                     </td>
@@ -110,9 +110,9 @@ const InterviewHistory: React.FC = () => {
                     </td>
 
                     {/* Date */}
-                    <td className="py-4.5 px-6 text-center text-slate-400 font-mono text-[10px]">
+                    <td className="py-4.5 px-6 text-center text-slate-500 font-mono text-[10px] font-bold">
                       <div className="flex items-center justify-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                        <Calendar className="w-3.5 h-3.5 text-slate-400" />
                         {item.date}
                       </div>
                     </td>
@@ -121,7 +121,7 @@ const InterviewHistory: React.FC = () => {
                     <td className="py-4.5 px-6 text-right">
                       <button
                         onClick={() => navigate(`/reports`, { state: { reportId: item.id } })}
-                        className="glass-btn px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5 hover:bg-violet-600/20 hover:border-violet-500/50 hover:text-white transition-colors"
+                        className="glass-btn px-3 py-1.5 rounded-xl inline-flex items-center gap-1.5 transition-colors font-bold text-slate-700 hover:text-violet-700 hover:bg-violet-50/50 hover:border-violet-300 cursor-pointer"
                       >
                         <FileText className="w-3.5 h-3.5" />
                         <span>View Analysis</span>
@@ -137,15 +137,15 @@ const InterviewHistory: React.FC = () => {
 
         {/* Pagination controls */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-white/5 bg-slate-950/20">
-            <span className="text-[10px] text-slate-500 font-mono">
+          <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+            <span className="text-[10px] text-slate-500 font-mono font-semibold">
               Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredReports.length)} of {filteredReports.length} records
             </span>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="p-1.5 rounded-lg border border-white/5 bg-white/3 text-slate-400 hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors"
+                className="p-1.5 rounded-xl border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 disabled:pointer-events-none transition-colors shadow-sm cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -153,10 +153,10 @@ const InterviewHistory: React.FC = () => {
                 <button
                   key={idx}
                   onClick={() => handlePageChange(idx + 1)}
-                  className={`w-7 h-7 rounded-lg text-xs font-mono font-bold transition-all border ${
+                  className={`w-7 h-7 rounded-xl text-xs font-mono font-bold transition-all border ${
                     currentPage === idx + 1
-                      ? 'bg-violet-600 text-white border-violet-500 shadow-md'
-                      : 'border-white/5 bg-slate-900/40 text-slate-400 hover:text-white'
+                      ? 'bg-violet-600 text-white border-violet-500 shadow-sm shadow-violet-500/10'
+                      : 'border-slate-200 bg-white text-slate-655 hover:bg-slate-50 hover:text-slate-900 shadow-sm cursor-pointer'
                   }`}
                 >
                   {idx + 1}
@@ -165,7 +165,7 @@ const InterviewHistory: React.FC = () => {
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="p-1.5 rounded-lg border border-white/5 bg-white/3 text-slate-400 hover:text-white disabled:opacity-40 disabled:pointer-events-none transition-colors"
+                className="p-1.5 rounded-xl border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 disabled:pointer-events-none transition-colors shadow-sm cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

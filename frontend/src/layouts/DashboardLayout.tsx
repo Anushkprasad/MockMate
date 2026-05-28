@@ -13,16 +13,16 @@ export const DashboardLayout: React.FC = () => {
   // Route guarding: if loading, display loader. If not authenticated, redirect to login.
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center relative overflow-hidden">
+      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center relative overflow-hidden">
         {/* Futuristic glowing spin loader */}
         <div className="absolute top-[30%] left-[30%] w-[40%] h-[40%] bg-bg-glow-purple pointer-events-none rounded-full" />
         <div className="absolute bottom-[30%] right-[30%] w-[40%] h-[40%] bg-bg-glow-cyan pointer-events-none rounded-full" />
         <div className="flex flex-col items-center gap-4 z-10">
           <div className="relative w-16 h-16">
-            <div className="absolute inset-0 rounded-full border-4 border-violet-500/20" />
-            <div className="absolute inset-0 rounded-full border-4 border-t-violet-500 border-r-cyan-400 animate-spin" />
+            <div className="absolute inset-0 rounded-full border-4 border-violet-200" />
+            <div className="absolute inset-0 rounded-full border-4 border-t-violet-600 border-r-sky-400 animate-spin" />
           </div>
-          <span className="font-display font-bold text-xs tracking-widest text-slate-400 uppercase">
+          <span className="font-display font-bold text-xs tracking-widest text-slate-600 uppercase">
             Synchronizing AI Biometrics...
           </span>
         </div>
