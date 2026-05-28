@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Building2, UserCircle, Play, Zap, FileText } from 'lucide-react';
+import { Sparkles, Building2, UserCircle, Play, Zap, FileText, Mic } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { useInterview, type Question } from '../../context/interview/InterviewContext';
@@ -15,6 +15,65 @@ import { SessionSummaryModal } from '../../components/interview/SessionSummaryMo
 
 
 
+
+// Custom TypeScript declarations for Browser Web Speech API
+interface SpeechRecognitionEvent extends Event {
+  readonly resultIndex: number;
+  readonly results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionResultList {
+  readonly length: number;
+  item(index: number): SpeechRecognitionResult;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  readonly length: number;
+  item(index: number): SpeechRecognitionAlternative;
+  [index: number]: SpeechRecognitionAlternative;
+  readonly isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+  readonly transcript: string;
+  readonly confidence: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  readonly error: string;
+  readonly message: string;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  maxAlternatives: number;
+  onaudiostart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onsoundstart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onspeechstart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onspeechend: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onsoundend: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onaudioend: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null;
+  onnomatch: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null;
+  onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => any) | null;
+  onstart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onend: ((this: SpeechRecognition, ev: Event) => any) | null;
+  start(): void;
+  stop(): void;
+  abort(): void;
+}
+
+interface Window {
+  SpeechRecognition?: {
+    new (): SpeechRecognition;
+  };
+  webkitSpeechRecognition?: {
+    new (): SpeechRecognition;
+  };
+}
 
 const InterviewRoom: React.FC = () => {
   const { 
@@ -103,9 +162,105 @@ const InterviewRoom: React.FC = () => {
   const [isSubmittingAnswer, setIsSubmittingAnswer] = useState(false);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
 
+  // Speech recognition states
+  const [isListening, setIsListening] = useState(false);
+  const [micPermissionError, setMicPermissionError] = useState<string | null>(null);
+  const [isSpeechSupported, setIsSpeechSupported] = useState(true);
+  const recognitionRef = React.useRef<SpeechRecognition | null>(null);
+  const baselineTextRef = React.useRef<string>('');
+
+  // Initialize Speech Recognition
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setIsSpeechSupported(false);
+      return;
+    }
+
+    const rec = new SpeechRecognition();
+    rec.continuous = true;
+    rec.interimResults = true;
+    rec.lang = 'en-US';
+
+    rec.onstart = () => {
+      setIsListening(true);
+      setMicPermissionError(null);
+    };
+
+    rec.onerror = (event: SpeechRecognitionErrorEvent) => {
+      console.error("[Speech Error] Recognition error:", event.error);
+      if (event.error === 'not-allowed') {
+        setMicPermissionError("Mic blocked");
+        toast.error("Microphone permission denied. Please allow mic access in your browser settings.");
+      } else if (event.error === 'no-speech') {
+        console.warn("[Speech Info] No speech detected, stopping listening automatically.");
+      } else {
+        toast.error(`Speech recognition error: ${event.error}`);
+      }
+      setIsListening(false);
+    };
+
+    rec.onend = () => {
+      setIsListening(false);
+    };
+
+    rec.onresult = (event: SpeechRecognitionEvent) => {
+      console.log(`[Speech Debug] Received result event. Result length: ${event.results.length}, active index: ${event.resultIndex}`);
+      let sessionTranscript = '';
+      
+      for (let i = 0; i < event.results.length; ++i) {
+        const result = event.results[i];
+        if (result && result[0]) {
+          sessionTranscript += result[0].transcript;
+        }
+      }
+      
+      console.log("[Speech Debug] Cumulative session transcript parsed:", sessionTranscript);
+      const prefix = baselineTextRef.current ? baselineTextRef.current.trim() + ' ' : '';
+      setTypedAnswer(prefix + sessionTranscript.trim());
+    };
+
+    recognitionRef.current = rec;
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  const toggleListening = () => {
+    if (!isSpeechSupported || !recognitionRef.current) {
+      toast.error("Speech recognition is not supported in this browser. Please use Google Chrome.");
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      setMicPermissionError(null);
+      baselineTextRef.current = typedAnswer;
+      
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (err: any) {
+        console.error("[Speech Error] Could not start speech recognition:", err);
+        setIsListening(false);
+      }
+    }
+  };
+
   // Sync state when active session or current question changes
   useEffect(() => {
     if (activeSession) {
+      // Auto-stop listening when transitioning to a new question
+      if (isListening && recognitionRef.current) {
+        recognitionRef.current.stop();
+        setIsListening(false);
+      }
+
       const currentQ = activeSession.questions[activeSession.currentQuestionIndex];
       const existingAnswer = activeSession.transcripts[currentQ.id] || '';
       setTypedAnswer(existingAnswer);
@@ -119,6 +274,12 @@ const InterviewRoom: React.FC = () => {
       return;
     }
     
+    // Auto-stop listening when submitting answer
+    if (isListening && recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    }
+
     setIsSubmittingAnswer(true);
     try {
       const ok = await submitCurrentAnswer(typedAnswer);
@@ -442,7 +603,7 @@ const InterviewRoom: React.FC = () => {
           />
           <MicrophonePanel 
             enabled={activeSession.micEnabled} 
-            isRecording={activeSession.isActive && !activeSession.isPaused} 
+            isRecording={isListening} 
           />
           <ConfidenceMeter 
             score={latestConfidence}
@@ -495,19 +656,51 @@ const InterviewRoom: React.FC = () => {
             />
 
             <div className="flex justify-between items-center pt-2 border-t border-white/5">
-              <span className="text-[9px] text-slate-500 font-mono">
-                Character count: {typedAnswer.length}
-              </span>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={handleSubmitAnswerClick}
-                loading={isSubmittingAnswer}
-                disabled={isSubmittingAnswer || activeSession.isPaused || !typedAnswer.trim()}
-                className="rounded-xl px-4 py-2 text-xs font-bold bg-violet-600 hover:bg-violet-500 transition-all shadow-md shadow-violet-500/10"
-              >
-                {isAnswerSubmitted ? "Update Stored Answer" : "Submit Answer"}
-              </Button>
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] text-slate-500 font-mono">
+                  Character count: {typedAnswer.length}
+                </span>
+                {isListening && (
+                  <span className="inline-flex items-center gap-1.5 text-[9px] font-bold text-cyan-400 font-mono ml-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                    Listening...
+                  </span>
+                )}
+                {micPermissionError && (
+                  <span className="text-[9px] text-red-400 font-medium ml-2">
+                    {micPermissionError}
+                  </span>
+                )}
+              </div>
+              
+              <div className="flex items-center gap-2">
+                {isSpeechSupported && (
+                  <button
+                    type="button"
+                    onClick={toggleListening}
+                    disabled={activeSession.isPaused || isSubmittingAnswer}
+                    className={`p-2.5 rounded-xl border flex items-center justify-center transition-all duration-300 ${
+                      isListening
+                        ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 shadow-[0_0_12px_rgba(34,211,238,0.2)] animate-pulse'
+                        : 'bg-slate-950/60 border-white/10 text-slate-400 hover:text-white hover:border-white/20'
+                    }`}
+                    title={isListening ? "Stop Voice Transcription" : "Start Voice Transcription"}
+                  >
+                    <Mic className="w-4 h-4" />
+                  </button>
+                )}
+
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleSubmitAnswerClick}
+                  loading={isSubmittingAnswer}
+                  disabled={isSubmittingAnswer || activeSession.isPaused || !typedAnswer.trim()}
+                  className="rounded-xl px-4 py-2 text-xs font-bold bg-violet-600 hover:bg-violet-500 transition-all shadow-md shadow-violet-500/10"
+                >
+                  {isAnswerSubmitted ? "Update Stored Answer" : "Submit Answer"}
+                </Button>
+              </div>
             </div>
           </div>
 
