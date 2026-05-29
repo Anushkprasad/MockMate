@@ -4,6 +4,7 @@ import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth/AuthContext';
+import { API_BASE_URL } from '../../services/apiClient';
 
 // 1. AuthCard
 export const AuthCard: React.FC<{ children: React.ReactNode; title: string; subtitle?: string }> = ({
@@ -127,7 +128,7 @@ export const SocialLoginButtons: React.FC = () => {
   const { socialSignIn } = useAuth();
 
   const handleSocial = async (provider: 'google' | 'github' | 'linkedin') => {
-    const API_URL = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+    const API_URL = API_BASE_URL;
 
     if (provider === 'google') {
       console.log('[DEBUG] Google OAuth flow - Redirecting user to backend Google OAuth initiation path');

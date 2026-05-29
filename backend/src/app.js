@@ -16,6 +16,9 @@ const session = require("express-session");
 const passport = require("passport");
 const app = express();
 
+// Trust reverse proxy for secure cookies and protocol resolution
+app.set("trust proxy", 1);
+
 // Set HTTP Security Headers safely
 app.use(
   helmet({
@@ -26,6 +29,7 @@ app.use(
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://mockmate-eight-navy.vercel.app",
   process.env.CLIENT_URL,
   process.env.FRONTEND_URL
 ].filter(Boolean);
