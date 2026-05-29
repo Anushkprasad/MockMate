@@ -62,16 +62,16 @@ router.get(
   "/google/callback",
 
   passport.authenticate("google", {
-    failureRedirect: `${process.env.FRONTEND_URL || "http://localhost:5173"}/login`,
+    failureRedirect: `${process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"}/login`,
     session: true,
   }),
 
   async (req, res) => {
     const token = generateToken(req.user._id);
 
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const clientUrl = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:5173';
     res.redirect(
-      `${frontendUrl}/oauth-success?token=${token}`
+      `${clientUrl}/oauth-success?token=${token}`
     );
   }
 );
@@ -86,16 +86,16 @@ router.get(
 router.get(
   "/github/callback",
   passport.authenticate("github", {
-    failureRedirect: `${process.env.FRONTEND_URL || "http://localhost:5173"}/login`,
+    failureRedirect: `${process.env.CLIENT_URL || process.env.FRONTEND_URL || "http://localhost:5173"}/login`,
     session: true,
   }),
   async (req, res) => {
     console.log("[DEBUG] GitHub OAuth Callback - User authenticated successfully:", req.user._id);
     const token = generateToken(req.user._id);
     console.log("[DEBUG] GitHub OAuth Callback - Generated JWT:", token);
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const clientUrl = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:5173';
     res.redirect(
-      `${frontendUrl}/oauth-success?token=${token}`
+      `${clientUrl}/oauth-success?token=${token}`
     );
   }
 );

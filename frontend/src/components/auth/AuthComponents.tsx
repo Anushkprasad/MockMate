@@ -127,18 +127,16 @@ export const SocialLoginButtons: React.FC = () => {
   const { socialSignIn } = useAuth();
 
   const handleSocial = async (provider: 'google' | 'github' | 'linkedin') => {
-    const API_BASE = import.meta.env.VITE_API_BASE_URL 
-      ? import.meta.env.VITE_API_BASE_URL.replace(/\/api$/, '') 
-      : 'http://localhost:5000';
+    const API_URL = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
     if (provider === 'google') {
       console.log('[DEBUG] Google OAuth flow - Redirecting user to backend Google OAuth initiation path');
-      window.location.href = `${API_BASE}/api/auth/google`;
+      window.location.href = `${API_URL}/auth/google`;
       return;
     }
     if (provider === 'github') {
       console.log('[DEBUG] GitHub OAuth flow - Redirecting user to backend GitHub OAuth initiation path');
-      window.location.href = `${API_BASE}/api/auth/github`;
+      window.location.href = `${API_URL}/auth/github`;
       return;
     }
     try {
