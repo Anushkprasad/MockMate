@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 
 const registerUser = async (req, res) => {
+  console.log("Signup Request:", req.body);
   try {
     const { name, email, password } = req.body;
   
@@ -49,6 +50,7 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+  console.log("Login Request:", req.body);
   try {
     const { email, password } = req.body;
 
