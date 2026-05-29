@@ -222,11 +222,16 @@ STRICTLY BAN: system design, advanced low-level internals (Fiber, locking, engin
 
     let generatedQuestion = null;
 
-    // 4. Attempt low-latency Groq query using llama-3.1-8b-instant
-    if (process.env.GROQ_API_KEY) {
-      console.log(`[DEBUG] AI Service - Querying llama-3.1-8b-instant on Groq for low latency.`);
-      try {
-        const prompt = `You are a technical interviewer at ${company || "a tech firm"}.
+    // 4. Validate API key exists before AI calls
+    if (!process.env.GROQ_API_KEY) {
+      console.error("[DEBUG] GROQ_API_KEY is missing from environment variables.");
+      throw new Error("GROQ_API_KEY is missing");
+    }
+
+    console.log("Groq request started");
+    console.log(`[DEBUG] AI Service - Querying llama-3.1-8b-instant on Groq for low latency.`);
+    try {
+      const prompt = `You are a technical interviewer at ${company || "a tech firm"}.
 Generate ONE question for a ${expTier} applying for the role of ${role}.
 
 EXPERIENCE LEVEL CONSTRAINTS:
@@ -249,10 +254,12 @@ STRICT OUTPUT RULES:
   "suggestedDuration": ${activeCategory === "debugging" ? 180 : 120}
 }`;
 
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 12000);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
 
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      let response;
+      try {
+        response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -271,36 +278,51 @@ STRICT OUTPUT RULES:
           }),
           signal: controller.signal,
         });
-
-        clearTimeout(timeoutId);
-
-        if (response.ok) {
-          const data = await response.json();
-          let contentText = data.choices[0].message.content.trim();
-          console.log(`[DEBUG] AI Service - Groq response: "${contentText}"`);
-
-          // Sanitize fences
-          if (contentText.startsWith("```json")) contentText = contentText.substring(7);
-          else if (contentText.startsWith("```")) contentText = contentText.substring(3);
-          if (contentText.endsWith("```")) contentText = contentText.substring(0, contentText.length - 3);
-          contentText = contentText.trim();
-
-          const parsed = JSON.parse(contentText);
-          if (parsed && parsed.question) {
-            generatedQuestion = {
-              text: parsed.question,
-              category: parsed.category || "technical",
-              difficulty: parsed.difficulty || (expTier === "junior" ? "simple" : expTier === "mid-level" ? "moderate" : "advanced"),
-              tips: Array.isArray(parsed.tips) ? parsed.tips.slice(0, 3) : ["Detail implementation specifics.", "Focus on complexities.", "Reference real-world cases."],
-              suggestedDuration: Number(parsed.suggestedDuration) || 120
-            };
-          }
-        } else {
-          console.error(`[DEBUG] AI Service - Groq llama-3.1-8b-instant failed with status: ${response.status}`);
+      } catch (fetchErr) {
+        if (fetchErr.name === 'AbortError') {
+          throw new Error("AI service temporarily unavailable. Please try again.");
         }
-      } catch (err) {
-        console.error(`[DEBUG] AI Service - Exception during Groq query:`, err);
+        throw new Error("Network connectivity issue. Please check your connection.");
+      } finally {
+        clearTimeout(timeoutId);
       }
+
+      console.log("Groq response received");
+
+      if (response.ok) {
+        const data = await response.json();
+        let contentText = data.choices[0].message.content.trim();
+        console.log(`[DEBUG] AI Service - Groq response: "${contentText}"`);
+
+        // Sanitize fences
+        if (contentText.startsWith("```json")) contentText = contentText.substring(7);
+        else if (contentText.startsWith("```")) contentText = contentText.substring(3);
+        if (contentText.endsWith("```")) contentText = contentText.substring(0, contentText.length - 3);
+        contentText = contentText.trim();
+
+        const parsed = JSON.parse(contentText);
+        if (parsed && parsed.question) {
+          generatedQuestion = {
+            text: parsed.question,
+            category: parsed.category || "technical",
+            difficulty: parsed.difficulty || (expTier === "junior" ? "simple" : expTier === "mid-level" ? "moderate" : "advanced"),
+            tips: Array.isArray(parsed.tips) ? parsed.tips.slice(0, 3) : ["Detail implementation specifics.", "Focus on complexities.", "Reference real-world cases."],
+            suggestedDuration: Number(parsed.suggestedDuration) || 120
+          };
+        }
+      } else {
+        console.error(`[DEBUG] AI Service - Groq llama-3.1-8b-instant failed with status: ${response.status}`);
+        if (response.status === 401) {
+          throw new Error("Invalid API configuration. Please contact administrator.");
+        } else if (response.status === 429) {
+          throw new Error("Rate limit exceeded. Please wait a moment and try again.");
+        } else {
+          throw new Error("AI service temporarily offline. Please try again.");
+        }
+      }
+    } catch (err) {
+      console.error(`[DEBUG] AI Service - Exception during Groq query:`, err);
+      throw err;
     }
 
     // 5. High-fidelity fallback engine: Run if Groq is offline or failed
@@ -424,23 +446,29 @@ STRICT OUTPUT RULES:
 
     let result = null;
 
-    if (process.env.GROQ_API_KEY) {
-      console.log(`[DEBUG] AI Service - Querying Groq llama-3.1-8b-instant for interview evaluation.`);
-      try {
-        const expTier = ["junior", "mid-level", "senior"].includes(experienceLevel.toLowerCase()) ? experienceLevel.toLowerCase() : "junior";
-        
-        let evaluationStandard = "";
-        if (expTier === "junior") {
-          evaluationStandard = `Junior level standard. Evaluate on basic programming syntax, core foundational concepts, logical steps, and simple code workflows. Be constructive but strict—if they do not know basic concepts, rate accordingly. Do not expect complex system designs or advanced runtime optimizations.`;
-        } else if (expTier === "mid-level") {
-          evaluationStandard = `Mid-level standard. Expect solid understanding of application architecture, REST API design, intermediate state management, basic optimizations, error handling, and debugging.`;
-        } else {
-          evaluationStandard = `Senior level standard. Expect deep expertise, systems design authority, performance optimization, concurrency patterns, distributed databases, memory leak tracking, and core runtime engine behavior. Standard is exceptionally high and rigorous.`;
-        }
+    // 4. Validate API key exists before AI calls
+    if (!process.env.GROQ_API_KEY) {
+      console.error("[DEBUG] GROQ_API_KEY is missing from environment variables.");
+      throw new Error("GROQ_API_KEY is missing");
+    }
 
-        const formattedTranscript = transcript.map((q, idx) => `Q${idx + 1}: "${q.question}"\nCandidate Answer: "${q.answer}"`).join("\n\n");
+    console.log("Groq request started");
+    console.log(`[DEBUG] AI Service - Querying Groq llama-3.1-8b-instant for interview evaluation.`);
+    try {
+      const expTier = ["junior", "mid-level", "senior"].includes(experienceLevel.toLowerCase()) ? experienceLevel.toLowerCase() : "junior";
+      
+      let evaluationStandard = "";
+      if (expTier === "junior") {
+        evaluationStandard = `Junior level standard. Evaluate on basic programming syntax, core foundational concepts, logical steps, and simple code workflows. Be constructive but strict—if they do not know basic concepts, rate accordingly. Do not expect complex system designs or advanced runtime optimizations.`;
+      } else if (expTier === "mid-level") {
+        evaluationStandard = `Mid-level standard. Expect solid understanding of application architecture, REST API design, intermediate state management, basic optimizations, error handling, and debugging.`;
+      } else {
+        evaluationStandard = `Senior level standard. Expect deep expertise, systems design authority, performance optimization, concurrency patterns, distributed databases, memory leak tracking, and core runtime engine behavior. Standard is exceptionally high and rigorous.`;
+      }
 
-        const prompt = `You are a professional software engineering recruiter and senior interviewer at ${company || "a tech company"}.
+      const formattedTranscript = transcript.map((q, idx) => `Q${idx + 1}: "${q.question}"\nCandidate Answer: "${q.answer}"`).join("\n\n");
+
+      const prompt = `You are a professional software engineering recruiter and senior interviewer at ${company || "a tech company"}.
 You have just completed an interview for a ${expTier} applying for the role of ${role} (Difficulty: ${difficulty}).
 
 You are evaluating their performance. You must act as a realistic, strict, and rigorous interviewer, NOT a supportive tutor. DO NOT give inflated scores.
@@ -489,10 +517,12 @@ STRICT RULES FOR OUTPUT:
 }
 2. The scores MUST be extremely realistic and follow all instructions strictly. Do not explain anything outside the JSON structure.`;
 
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 12000);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
 
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      let response;
+      try {
+        response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -511,39 +541,54 @@ STRICT RULES FOR OUTPUT:
           }),
           signal: controller.signal,
         });
-
-        clearTimeout(timeoutId);
-
-        if (response.ok) {
-          const data = await response.json();
-          let contentText = data.choices[0].message.content.trim();
-          console.log(`[DEBUG] AI Service - Groq evaluation raw response: "${contentText}"`);
-
-          // Sanitize fences
-          if (contentText.startsWith("```json")) contentText = contentText.substring(7);
-          else if (contentText.startsWith("```")) contentText = contentText.substring(3);
-          if (contentText.endsWith("```")) contentText = contentText.substring(0, contentText.length - 3);
-          contentText = contentText.trim();
-
-          const parsed = JSON.parse(contentText);
-          if (parsed && typeof parsed.overallScore === "number") {
-            result = {
-              overallScore: Math.min(100, Math.max(0, parsed.overallScore)),
-              technicalScore: Math.min(100, Math.max(0, parsed.technicalScore || parsed.overallScore)),
-              communicationScore: Math.min(100, Math.max(0, parsed.communicationScore || parsed.overallScore)),
-              confidenceScore: Math.min(100, Math.max(0, parsed.confidenceScore || parsed.overallScore)),
-              strengths: Array.isArray(parsed.strengths) ? parsed.strengths.slice(0, 3) : ["Good overall performance"],
-              weaknesses: Array.isArray(parsed.weaknesses) ? parsed.weaknesses.slice(0, 3) : ["Some minor areas for improvement"],
-              feedback: parsed.feedback || "Good effort. Keep practicing on Mock Space to boost your score.",
-              questionBreakdown: Array.isArray(parsed.questionBreakdown) ? parsed.questionBreakdown : []
-            };
-          }
-        } else {
-          console.error(`[DEBUG] AI Service - Groq evaluation failed with status: ${response.status}`);
+      } catch (fetchErr) {
+        if (fetchErr.name === 'AbortError') {
+          throw new Error("AI service temporarily unavailable. Please try again.");
         }
-      } catch (err) {
-        console.error(`[DEBUG] AI Service - Exception during Groq evaluation query:`, err);
+        throw new Error("Network connectivity issue. Please check your connection.");
+      } finally {
+        clearTimeout(timeoutId);
       }
+
+      console.log("Groq response received");
+
+      if (response.ok) {
+        const data = await response.json();
+        let contentText = data.choices[0].message.content.trim();
+        console.log(`[DEBUG] AI Service - Groq evaluation raw response: "${contentText}"`);
+
+        // Sanitize fences
+        if (contentText.startsWith("```json")) contentText = contentText.substring(7);
+        else if (contentText.startsWith("```")) contentText = contentText.substring(3);
+        if (contentText.endsWith("```")) contentText = contentText.substring(0, contentText.length - 3);
+        contentText = contentText.trim();
+
+        const parsed = JSON.parse(contentText);
+        if (parsed && typeof parsed.overallScore === "number") {
+          result = {
+            overallScore: Math.min(100, Math.max(0, parsed.overallScore)),
+            technicalScore: Math.min(100, Math.max(0, parsed.technicalScore || parsed.overallScore)),
+            communicationScore: Math.min(100, Math.max(0, parsed.communicationScore || parsed.overallScore)),
+            confidenceScore: Math.min(100, Math.max(0, parsed.confidenceScore || parsed.overallScore)),
+            strengths: Array.isArray(parsed.strengths) ? parsed.strengths.slice(0, 3) : ["Good overall performance"],
+            weaknesses: Array.isArray(parsed.weaknesses) ? parsed.weaknesses.slice(0, 3) : ["Some minor areas for improvement"],
+            feedback: parsed.feedback || "Good effort. Keep practicing on Mock Space to boost your score.",
+            questionBreakdown: Array.isArray(parsed.questionBreakdown) ? parsed.questionBreakdown : []
+          };
+        }
+      } else {
+        console.error(`[DEBUG] AI Service - Groq evaluation failed with status: ${response.status}`);
+        if (response.status === 401) {
+          throw new Error("Invalid API configuration. Please contact administrator.");
+        } else if (response.status === 429) {
+          throw new Error("Rate limit exceeded. Please wait a moment and try again.");
+        } else {
+          throw new Error("AI service temporarily offline. Please try again.");
+        }
+      }
+    } catch (err) {
+      console.error(`[DEBUG] AI Service - Exception during Groq evaluation query:`, err);
+      throw err;
     }
 
     // High-fidelity fallback engine: Run if Groq is offline or failed
